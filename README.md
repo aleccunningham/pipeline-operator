@@ -1,6 +1,4 @@
 # pipeline-operator
-[![Build Status](https://travis-ci.org/spotahome/redis-operator.png)](https://travis-ci.org/spotahome/redis-operator)
-[![Go Report Card](http://goreportcard.com/badge/spotahome/redis-operator)](http://goreportcard.com/report/spotahome/redis-operator)
 
 **NOTE**: This is an alpha-status project. We do regular tests on the code and functionality, but we can not assure a production-ready stability.
 
@@ -10,12 +8,9 @@ Pipeline Operator creates/configures/manages container-based workflow Pipeline o
 Pipeline Operator is meant to be run on Kubernetes 1.8+.
 All dependecies have been vendored, so there's no need to any additional download.
 
-### Versions deployed
-The image versions deployed by the operator can be found on the [constants file](operator/redisfailover/service/constants.go) for the RedisFailover service.
-
 ## Images
-### Redis Operator
-[![Redis Operator Image](https://quay.io/repository/spotahome/redis-operator/status "Redis Operator Image")](https://quay.io/repository/spotahome/redis-operator)
+### Pipeline Operator
+[![Pipeline Operator Image](https://quay.io/repository/marjoram/pipeline-operator/status "Redis Operator Image")](https://quay.io/repository/spotahome/redis-operator)
 
 ## Operator deployment on kubernetes
 In order to create Redis failovers inside a Kubernetes cluster, the operator has to be deployed. It can be done with a [deployment](example/operator.yaml) or with the provided [Helm chart](charts/pipelineoperator).
