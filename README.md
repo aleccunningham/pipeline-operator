@@ -1,4 +1,4 @@
-# Prometheus Operator
+# Pipeline Operator
 
 **Project status: *alpha*** Most planned features are completed. The API, spec, status and other user facing objects may introduce breaking changes.
 
