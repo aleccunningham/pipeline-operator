@@ -4,7 +4,7 @@ VERSION := 0.2.0
 SERVICE_NAME := pipeline-operator
 
 # Docker image name for this project
-IMAGE_NAME := duked/$(SERVICE_NAME)
+IMAGE_NAME := duke/$(SERVICE_NAME)
 
 # Repository url for this project
 REPOSITORY := quay.io/$(IMAGE_NAME)
@@ -42,7 +42,7 @@ DEV_DIR := docker/development
 APP_DIR := docker/app
 
 # workdir
-WORKDIR := /go/src/github.com/spotahome/redis-operator
+WORKDIR := /Users/aleccunningham/go/src/github.com/marjoram/duke-crd
 
 # The default action of this Makefile is to build the development docker image
 .PHONY: default

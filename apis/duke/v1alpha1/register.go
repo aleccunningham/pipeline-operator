@@ -11,7 +11,7 @@ const (
 	version = "v1alpha1"
 )
 
-// PodTerminator constants
+// Pipeline constants
 const (
 	PipelineKind       = "Pipeline"
 	PipelineName       = "pipeline"

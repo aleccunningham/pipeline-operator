@@ -33,4 +33,4 @@ RUN addgroup -g $gid rf && \
 
 
 USER rf
-WORKDIR /go/src/github.com/majoram/duked
+WORKDIR /go/src/github.com/majoram/duke-crd
