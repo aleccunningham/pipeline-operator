@@ -11,7 +11,7 @@ import (
 type Pipeline struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              DukedSpec `json:"spec"`
+	Spec              PipelineSpec `json:"spec"`
 }
 
 // PipelineSpec is the spec for a Duked resource

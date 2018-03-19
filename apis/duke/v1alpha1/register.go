@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	"k8s.io/api/rbac/v1alpha1"
 	apiextensionsv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -20,7 +21,7 @@ const (
 )
 
 // SchemeGroupVersion is group version used to register these objects
-var SchemeGroupVersion = schema.GroupVersion{Group: dukeOperator.GroupName, Version: version}
+var SchemeGroupVersion = schema.GroupVersion{Group: v1alpha1.GroupName, Version: version}
 
 // Kind takes an unqualified kind and returns back a Group qualified GroupKind
 func Kind(kind string) schema.GroupKind {
