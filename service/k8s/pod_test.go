@@ -13,8 +13,8 @@ import (
 	kubernetes "k8s.io/client-go/kubernetes/fake"
 	kubetesting "k8s.io/client-go/testing"
 
-	"github.com/spotahome/redis-operator/log"
-	"github.com/spotahome/redis-operator/service/k8s"
+	"github.com/marjoram/pipeline-operator/log"
+	"github.com/marjoram/pipeline-operator/service/k8s"
 )
 
 var (

@@ -4,8 +4,8 @@ import (
 	apiextensionscli "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/kubernetes"
 
-	redisfailoverclientset "github.com/spotahome/redis-operator/client/k8s/clientset/versioned"
-	"github.com/spotahome/redis-operator/log"
+	pipelineclientset "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned"
+	"github.com/marjoram/pipeline-operator/log"
 )
 
 // Service is the K8s service entrypoint.
@@ -34,7 +34,7 @@ type services struct {
 }
 
 // New returns a new Kubernetes service.
-func New(kubecli kubernetes.Interface, crdcli redisfailoverclientset.Interface, apiextcli apiextensionscli.Interface, logger log.Logger) Services {
+func New(kubecli kubernetes.Interface, crdcli pipelineclientset.Interface, apiextcli apiextensionscli.Interface, logger log.Logger) Services {
 	return &services{
 		CRD:                 NewCRDService(apiextcli, logger),
 		ConfigMap:           NewConfigMapService(kubecli, logger),
