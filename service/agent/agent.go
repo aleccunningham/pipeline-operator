@@ -33,14 +33,14 @@ func NewAgent(k8sCli kubernetes.Interface, logger log.Logger) *Chaos {
 }
 
 // EnsureAgent satisfies AgentRunner interface.
-func (a *Agent) EnsureAgent(agent *agentv1alpha1.Agent) error {
+func (a *AgentRunner) EnsureAgent(agent *agentv1alpha1.Agent) error {
 	pkt, ok := a.reg.Load(agent.Name)
 	var runner *AgentRunner
 
 	// We are already running.
 	if ok {
 		runner = pkt.(*Agent)
-		// If not the same spec means options have changed, so we don't longer need this pod killer.
+		// If not the same spec means options have changed, so we don't longer need this runner
 		if !runner.SameSpec(agent) {
 			a.logger.Infof("spec of %s changed, recreating pod killer", agent.Name)
 			if err := c.DeleteAgent(agent.Name); err != nil {
@@ -60,7 +60,7 @@ func (a *Agent) EnsureAgent(agent *agentv1alpha1.Agent) error {
 }
 
 // DeletePodTerminator satisfies ChaosSyncer interface.
-func (c *Agent) DeleteAgent(name string) error {
+func (a *AgentRunner) DeleteAgent(name string) error {
 	pkt, ok := a.reg.Load(name)
 	if !ok {
 		return nil

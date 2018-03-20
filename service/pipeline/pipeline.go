@@ -36,14 +36,14 @@ func NewPipeline(k8sCli kubernetes.Interface, logger log.Logger) *Pipeline {
 }
 
 // EnsurePipeline satisfies Syncer interface.
-func (c *Client) EnsurePipeline(pipeline *pipelinev1alpha1.Pipeline) error {
+func (c *PipelineClient) EnsurePipeline(pipeline *pipelinev1alpha1.Pipeline) error {
 	pkt, ok := c.reg.Load(pipeline.Name)
 	var client *PipelineClient
 
 	// We are already running.
 	if ok {
 		pipeline = pkt.(*PipelineClient)
-		// If not the same spec means options have changed, so we don't longer need this pod killer.
+		// If not the same spec means options have changed, so we don't longer need this pipeline
 		if !pipeline.SameSpec(pipeline) {
 			c.logger.Infof("spec of %s changed, recreating pod killer", pipeline.Name)
 			if err := c.DeletePipeline(pipeline.Name); err != nil {
@@ -60,4 +60,20 @@ func (c *Client) EnsurePipeline(pipeline *pipelinev1alpha1.Pipeline) error {
 	// c.reg.Store(pt.Name, pk)
 	return pipeline.Start()
 	// TODO: garbage collection.
+}
+
+// DeletePipeline satisfies PipelineClient interface.
+func (p *PipelineClient) DeletePipeline(name string) error {
+	pkt, ok := p.reg.Load(name)
+	if !ok {
+		return nil
+	}
+
+	pipeline := pkt.(*PipelineClient)
+	if err := pipeline.Stop(); err != nil {
+		return err
+	}
+
+	p.reg.Delete(name)
+	return nil
 }
