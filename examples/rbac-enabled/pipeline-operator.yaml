@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: pipeline-operator
+  name: pipeline-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pipeline-operator
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: pipeline-operator
+    spec:
+      containers:
+      - image: quay.io/marjoram/pipeline-operator:0.1.0
+        imagePullPolicy: IfNotPresent
+        name: app
+        resources:
+          limits:
+            cpu: 100m
+            memory: 50Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+      restartPolicy: Always
