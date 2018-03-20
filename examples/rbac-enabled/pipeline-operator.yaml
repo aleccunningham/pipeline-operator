@@ -17,9 +17,9 @@ spec:
         app: pipeline-operator
     spec:
       containers:
-      - image: quay.io/marjoram/pipeline-operator:0.1.0
+      - image: quay.io/cncd/pipeline-operator:0.1.0
         imagePullPolicy: IfNotPresent
-        name: app
+        name: pipeline-operator
         resources:
           limits:
             cpu: 100m

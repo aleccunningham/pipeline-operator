@@ -22,6 +22,12 @@ The current project roadmap [can be found here](./ROADMAP.md).
 The Pipeline Operator requires a Kubernetes cluster of version `>=1.9.0`. If you are just starting out with the
 Pipeline Operator, it is highly recommended to use the latest version.
 
+## Running
+
+```
+$ go run cmd/*
+```
+
 ## CustomResourceDefinitions
 
 The Operator acts on the following [custom resource definitions (CRDs)](https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions/):
@@ -31,8 +37,8 @@ The Operator acts on the following [custom resource definitions (CRDs)](https://
 
 * **`Agent`**, which declaratively specifies in-cluster pipeline-runners
   The Operator automatically generates Pipeline configuration for the agent based on the definition.
-  
-* **`AutoScaler`**, Automatically adds or removes instances based on build volume 
+
+* **`AutoScaler`**, Automatically adds or removes instances based on build volume
   WIP Move `AutoScaler` into `Agent` operator
 
 To learn more about the CRDs introduced by the Pipeline Operator have a look
