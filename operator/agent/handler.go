@@ -10,16 +10,16 @@ import (
 	"github.com/marjoram/pipeline-operator/log"
 )
 
-// agentHandler is the pipeline event handler
-type agentHandler struct {
-	agentService agentdukev1alpha1.Syncer
+// Handler is the agentn event handler
+type handler struct {
+	agentService agentv1alpha1.Syncer
 	logger       log.Logger
 }
 
 // newHandler returns a new handler
 func newHandler(k8sCli kubernetes.Interface, logger log.Logger) *handler {
 	return &handler{
-		pipelineService: agentv1alpha1.NewPipeline(k8sCli, logger),
+		pipelineService: agentv1alpha1.NewAgent(k8sCli, logger),
 		logger:          logger,
 	}
 }

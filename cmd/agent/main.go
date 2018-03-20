@@ -14,7 +14,7 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	agentv1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
 	"github.com/marjoram/pipeline-operator/log"
 	"github.com/marjoram/pipeline-operator/operator/pipeline"
 )
@@ -57,7 +57,7 @@ func (m *Main) Run(stopC <-chan struct{}) error {
 
 // getKubernetesClients returns all the required clients to communicate with
 // kubernetes cluster: CRD type client, pod terminator types client, kubernetes core types client.
-func (m *Main) getKubernetesClients() (pipelinek8scli.Interface, crd.Interface, kubernetes.Interface, error) {
+func (m *Main) getKubernetesClients() (agentv1alpha1.Interface, crd.Interface, kubernetes.Interface, error) {
 	var err error
 	var cfg *rest.Config
 
@@ -81,7 +81,7 @@ func (m *Main) getKubernetesClients() (pipelinek8scli.Interface, crd.Interface, 
 	}
 
 	// App CRD k8s types client.
-	pipeCli, err := pipelinedukev1alpha1.NewForConfig(cfg)
+	pipeCli, err := agentv1alpha1.NewForConfig(cfg)
 	if err != nil {
 		return nil, nil, nil, err
 	}

@@ -79,7 +79,7 @@ for n in $(kubectl get namespaces -o jsonpath={..metadata.name}); do
   kubectl delete --ignore-not-found --namespace=$n service pipeline-operater agent-operater
 done
 
-kubectl delete --ignore-not-found customresourcedefinitions pipeline.duke.lol agent.duke.lol
+kubectl delete --ignore-not-found customresourcedefinitions pipeline.cncd.io agent.cncd.io
 ```
 
 ## Development

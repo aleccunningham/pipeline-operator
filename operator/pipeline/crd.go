@@ -8,7 +8,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 
-	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	pipelinev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
 )
 
 // PipelineCRD is a Pipeline CRD
@@ -18,7 +18,7 @@ type PipelineCRD struct {
 	pipeCli  pipeline.Interface
 }
 
-func newPipelineCRD(pipeCli Pipeline.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface) *PipelineCRD {
+func newPipelineCRD(pipeCli pipelinev1alpha1.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface) *PipelineCRD {
 	return &PipelineCRD{
 		crdCli:   crdCli,
 		pipeCli:  pipeCli,
@@ -29,11 +29,11 @@ func newPipelineCRD(pipeCli Pipeline.Interface, crdCli crd.Interface, kubeCli ku
 // podTerminatorCRD satisfies resource.crd interface.
 func (p *PipelineCRD) Initialize() error {
 	crd := crd.Conf{
-		Kind:       pipelinedukev1alpha1.PipelineKind,
-		NamePlural: pipelinedukev1alpha1.PipelineName,
-		Group:      pipelinedukev1alpha1.SchemeGroupVersion.Group,
-		Version:    pipelinedukev1alpha1.SchemeGroupVersion.Version,
-		Scope:      pipelinedukev1alpha1.PipelineScope,
+		Kind:       pipelinev1alpha1.PipelineKind,
+		NamePlural: pipelinev1alpha1.PipelineName,
+		Group:      pipelinev1alpha1.SchemeGroupVersion.Group,
+		Version:    pipelinev1alpha1.SchemeGroupVersion.Version,
+		Scope:      pipelinev1alpha1.PipelineScope,
 	}
 
 	return p.crdCli.EnsurePresent(crd)
@@ -53,5 +53,5 @@ func (p *PipelineCRD) GetListerWatcher() cache.ListerWatcher {
 
 // GetObject satisfies resource.crd interface (and retrieve.Retriever).
 func (p *podTerminatorCRD) GetObject() runtime.Object {
-	return &pipelinedukev1alpha1.Pipeline{}
+	return &pipelinev1alpha1.Pipeline{}
 }

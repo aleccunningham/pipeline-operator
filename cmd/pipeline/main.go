@@ -14,7 +14,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
 	"github.com/marjoram/pipeline-operator/log"
 	"github.com/marjoram/pipeline-operator/operator/pipeline"
 )
