@@ -16,7 +16,7 @@ import (
 
 	"github.com/marjoram/duke-crd/log"
 	"github.com/marjoram/duke-crd/operator"
-	podtermk8scli "github.com/spotahome/kooper/examples/pod-terminator-operator/client/k8s/clientset/versioned"
+	pipelinek8scli "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned"
 )
 
 // Main is the main program.
@@ -57,7 +57,7 @@ func (m *Main) Run(stopC <-chan struct{}) error {
 
 // getKubernetesClients returns all the required clients to communicate with
 // kubernetes cluster: CRD type client, pod terminator types client, kubernetes core types client.
-func (m *Main) getKubernetesClients() (podtermk8scli.Interface, crd.Interface, kubernetes.Interface, error) {
+func (m *Main) getKubernetesClients() (pipelinek8scli.Interface, crd.Interface, kubernetes.Interface, error) {
 	var err error
 	var cfg *rest.Config
 
@@ -81,7 +81,7 @@ func (m *Main) getKubernetesClients() (podtermk8scli.Interface, crd.Interface, k
 	}
 
 	// App CRD k8s types client.
-	ptCli, err := podtermk8scli.NewForConfig(cfg)
+	pipeCli, err := pipelinek8scli.NewForConfig(cfg)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -93,7 +93,7 @@ func (m *Main) getKubernetesClients() (podtermk8scli.Interface, crd.Interface, k
 	}
 	crdCli := crd.NewClient(aexCli, m.logger)
 
-	return ptCli, crdCli, k8sCli, nil
+	return pipeCli, crdCli, k8sCli, nil
 }
 
 func main() {
