@@ -1,74 +1,82 @@
-# pipeline-operator
-[![Build Status](https://travis-ci.org/spotahome/redis-operator.png)](https://travis-ci.org/spotahome/redis-operator)
-[![Go Report Card](http://goreportcard.com/badge/spotahome/redis-operator)](http://goreportcard.com/report/spotahome/redis-operator)
+# Pipeline Operator
 
-**NOTE**: This is an alpha-status project. We do regular tests on the code and functionality, but we can not assure a production-ready stability.
+**Project status: *alpha*** Most planned features are completed. The API, spec, status and other user facing objects may introduce breaking changes.
 
-Pipeline Operator creates/configures/manages container-based workflow Pipeline objects atop Kubernetes.
+The Pipeline Operator for Kubernetes provides easy continuous delivery for Kubernetes deployments and management of Pipeline instances.
 
-## Requirements
-Pipeline Operator is meant to be run on Kubernetes 1.8+.
-All dependecies have been vendored, so there's no need to any additional download.
+Once installed, the Pipeline Operator provides the following features:
 
-### Versions deployed
-The image versions deployed by the operator can be found on the [constants file](operator/redisfailover/service/constants.go) for the RedisFailover service.
+* **Create/Destroy**: Easily launch a Pipeline instance for your Kubernetes namespace,
+  a specific application or team easily using the Operator.
 
-## Images
-### Redis Operator
-[![Redis Operator Image](https://quay.io/repository/spotahome/redis-operator/status "Redis Operator Image")](https://quay.io/repository/spotahome/redis-operator)
+* **Simple Configuration**: Configure the fundamentals of Pipeline like versions, persistence, 
+  retention policies, and replicas from a native Kubernetes resource.
 
-## Operator deployment on kubernetes
-In order to create Redis failovers inside a Kubernetes cluster, the operator has to be deployed. It can be done with a [deployment](example/operator.yaml) or with the provided [Helm chart](charts/pipelineoperator).
+* **Target Services via Labels**: Automatically generate build trigger configurations based
+  on familiar Kubernetes label queries; no need to setup any external CI platform.
 
-### Using a Deployment
-To create the operator, you can directly create it with kubectl:
+The current project roadmap [can be found here](./ROADMAP.md).
+
+## Prerequisites
+
+The Pipeline Operator requires a Kubernetes cluster of version `>=1.9.0`. If you are just starting out with the 
+Pipeline Operator, it is highly recommended to use the latest version.
+
+## CustomResourceDefinitions
+
+The Operator acts on the following [custom resource definitions (CRDs)](https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions/):
+
+* **`Pipeline`**, which defines a desired Pipeline deployment and it's related deployment.
+  The Operator ensures at all times that a deployment matching the resource definition is running.
+
+* **`BuildAgent`**, which declaratively specifies in-cluster pipeline-runners
+  The Operator automatically generates Pipeline configuration for the agent based on the definition.
+
+To learn more about the CRDs introduced by the Prometheus Operator have a look
+at the [design doc](docs/design.md).
+
+## Installation
+
+Install the Operator inside a cluster by running the following command:
+
 ```
-kubectl create -f https://raw.githubusercontent.com/marjoram/pipeline-operator/master/example/operator.yaml
-```
-This will create a deployment named `pipelineoperator`.
-
-### Using the Helm chart
-From the root folder of the project, execute the following:
-```
-helm install --name pipeline charts/pipeline
-```
-
-## Usage
-Once the operator is deployed inside a Kubernetes cluster, a new API will be accesible, so you'll be able to create, update and delete Pipelines.
-
-In order to deploy a new pipeline a [specification](example/pipeline.yaml) has to be created:
-```
-kubectl create -f https://raw.githubusercontent.com/marjoram/pipeline-operator/master/example/pipeline.yaml
-```
-
-This pipelinne will be managed by the operator, resulting in the following elements created inside Kubernetes:
-* `pipeline-<NAME>`: Pipeline configmap
-* `pipeline-<NAME>`: Pipeline statefulset
-* `pipeline-<NAME>`: Pipeline service (if redis-exporter is enabled)
-* `duke-<NAME>`: Duke configmap
-* `duke-<NAME>`: Duke deployment
-* `duke-<NAME>`: Duke service
-
-**NOTE**: `NAME` is the named provided when creating the RedisFailover.
-
-### Connection
-In order to connect to the pipeline and use it, a duke server library has to be used. This will connect through the Duke service to the node working as a master.
-The connection parameters are the following:
-```
-url: pipeline-<NAME>
-port: 26379
-master-name: mymaster
+kubectl apply -f bundle.yaml
 ```
 
-## Cleanup
-If you want to delete the operator from your Kubernetes cluster, the operator deployment should be deleted.
+> Note: make sure to adapt the namespace in the ClusterRoleBinding if deploying in another namespace than the default namespace.
 
-Also, the CRD has to be deleted too:
+## Removal
+
+To remove the operator and Prometheus, first delete any custom resources you created in each namespace. The
+operator will automatically shut down and remove Prometheus and Alertmanager pods, and associated configmaps.
+
 ```
-kubectl delete crd pipeline.kubernetes.lol
+for n in $(kubectl get namespaces -o jsonpath={..metadata.name}); do
+  kubectl delete --all --namespace=$n pipeline,buildagent
+done
 ```
 
-## Documentation
-For the code documentation, you can lookup on the [GoDoc](https://godoc.org/github.com/marjoram/pipeline-operator).
+After a couple of minutes you can go ahead and remove the operator itself.
 
-Also, you can check more deeply information on the [docs folder](docs).
+```
+kubectl delete -f bundle.yaml
+```
+
+The operator automatically creates services in each namespace where you created a Prometheus or Alertmanager resources,
+and defines three custom resource definitions. You can clean these up now.
+
+```
+for n in $(kubectl get namespaces -o jsonpath={..metadata.name}); do
+  kubectl delete --ignore-not-found --namespace=$n service pipeline-operated buildagent-operated
+done
+
+kubectl delete --ignore-not-found customresourcedefinitions pipeline.duke.lol buildagent.duke.lol 
+```
+
+## Development
+
+### Prerequisites
+
+- golang environment
+- docker (used for creating container images, etc.)
+- minikube (optional)
