@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for the Marjoram Pipeline Operator
+name: pipelineoperator
+version: 0.1

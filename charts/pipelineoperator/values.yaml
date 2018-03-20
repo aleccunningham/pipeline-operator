@@ -1,0 +1,18 @@
+replicaCount: 1
+image: quay.io/marjoram/pipeline-operator
+tag: latest
+pullPolicy:
+service:
+  enabled: false
+group: ops
+resources:
+  requests:
+    cpu: 10m
+    memory: 50Mi
+  limits:
+    cpu: 100m
+    memory: 50Mi
+rbac:
+  install: true
+  apiVersion: v1beta1
+  imagePullSecrets: []

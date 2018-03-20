@@ -9,7 +9,7 @@ Once installed, the Pipeline Operator provides the following features:
 * **Create/Destroy**: Easily launch a Pipeline instance for your Kubernetes namespace,
   a specific application or team easily using the Operator.
 
-* **Simple Configuration**: Configure the fundamentals of Pipeline like versions, persistence, 
+* **Simple Configuration**: Configure the fundamentals of Pipeline like versions, persistence,
   retention policies, and replicas from a native Kubernetes resource.
 
 * **Target Services via Labels**: Automatically generate build trigger configurations based
@@ -19,7 +19,7 @@ The current project roadmap [can be found here](./ROADMAP.md).
 
 ## Prerequisites
 
-The Pipeline Operator requires a Kubernetes cluster of version `>=1.9.0`. If you are just starting out with the 
+The Pipeline Operator requires a Kubernetes cluster of version `>=1.9.0`. If you are just starting out with the
 Pipeline Operator, it is highly recommended to use the latest version.
 
 ## CustomResourceDefinitions
@@ -70,7 +70,7 @@ for n in $(kubectl get namespaces -o jsonpath={..metadata.name}); do
   kubectl delete --ignore-not-found --namespace=$n service pipeline-operated buildagent-operated
 done
 
-kubectl delete --ignore-not-found customresourcedefinitions pipeline.duke.lol buildagent.duke.lol 
+kubectl delete --ignore-not-found customresourcedefinitions pipeline.duke.lol buildagent.duke.lol
 ```
 
 ## Development
@@ -80,3 +80,11 @@ kubectl delete --ignore-not-found customresourcedefinitions pipeline.duke.lol bu
 - golang environment
 - docker (used for creating container images, etc.)
 - minikube (optional)
+
+### `minikube`
+
+Pass the following flags to `minikube start` to enable neccesary configuration changes:
+```
+#!/bin/bash
+minikube delete; minikube start --kubernetes-version=v1.9.1 --memory=4096 --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0
+```
