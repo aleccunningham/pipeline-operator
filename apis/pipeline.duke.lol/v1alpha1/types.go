@@ -8,7 +8,7 @@ import (
 // +genclient:nonNamespaced
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Pipeline is a duked resource defining a CI lifecycle
+// Pipeline is a duke resource defining a CI lifecycle
 type Pipeline struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object's metadata.
@@ -33,7 +33,7 @@ type PipelineSpec struct {
 	steps      Steps
 	notify     Notify
 	when       RunWhen
-	worker     Worker
+	config     Config
 }
 
 // SSHSettings defines operations for using SSH keys with duke
@@ -106,26 +106,6 @@ type RunWhen struct {
 	event map[string]string `json:"event,omitempty"`
 	// branch defines a git branch conditional
 	branch string `json:"branch,omitempty"`
-}
-
-// Worker defines the configuration for a pipeline executor
-type Worker struct {
-	// replicas controllers how many executors the operator will run at one given time
-	replicas int32 `json:"replicas,omitempty"`
-	// resources define k8 style cpu and memory limits & requests for executors
-	resources Resources `json:"resources,omitempty"`
-}
-
-// Resources sets the limits and requests for a container
-type Resources struct {
-	Requests CPUAndMem `json:"requests,omitempty"`
-	Limits   CPUAndMem `json:"limits,omitempty"`
-}
-
-// CPUAndMem defines how many cpu and ram the container will request/limit
-type CPUAndMem struct {
-	CPU    string `json:"cpu,omitempty"`
-	Memory string `json:"memory,omitempty"`
 }
 
 // Status has the status of the cluster

@@ -2,6 +2,8 @@ package fake
 
 import (
 	clientset "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned"
+	agentv1alpha1 "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/typed/agent.duke.lol/v1alpha1"
+	fakeagentv1alpha1 "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/typed/agent.duke.lol/v1alpha1/fake"
 	pipelinev1alpha1 "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/typed/pipeline.duke.lol/v1alpha1"
 	fakepipelinev1alpha1 "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/typed/pipeline.duke.lol/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -43,6 +45,16 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 }
 
 var _ clientset.Interface = &Clientset{}
+
+// AgentV1alpha1 retrieves the AgentV1alpha1Client
+func (c *Clientset) AgentV1alpha1() agentv1alpha1.AgentV1alpha1Interface {
+	return &fakeagentv1alpha1.FakeAgentV1alpha1{Fake: &c.Fake}
+}
+
+// Agent retrieves the AgentV1alpha1Client
+func (c *Clientset) Agent() agentv1alpha1.AgentV1alpha1Interface {
+	return &fakeagentv1alpha1.FakeAgentV1alpha1{Fake: &c.Fake}
+}
 
 // PipelineV1alpha1 retrieves the PipelineV1alpha1Client
 func (c *Clientset) PipelineV1alpha1() pipelinev1alpha1.PipelineV1alpha1Interface {
