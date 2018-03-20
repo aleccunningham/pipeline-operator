@@ -1,6 +1,6 @@
 # Pipeline Operator
 
-**Project status: *alpha*** Most planned features are completed. The API, spec, status and other user facing objects may introduce breaking changes.
+**Project status: *alpha*** Nearly all planned features are incomplete. The API, spec, status and other user facing objects will introduce breaking changes.
 
 The Pipeline Operator for Kubernetes provides easy continuous delivery for Kubernetes deployments and management of Pipeline instances.
 
@@ -29,10 +29,13 @@ The Operator acts on the following [custom resource definitions (CRDs)](https://
 * **`Pipeline`**, which defines a desired Pipeline deployment and it's related deployment.
   The Operator ensures at all times that a deployment matching the resource definition is running.
 
-* **`BuildAgent`**, which declaratively specifies in-cluster pipeline-runners
+* **`Agent`**, which declaratively specifies in-cluster pipeline-runners
   The Operator automatically generates Pipeline configuration for the agent based on the definition.
+  
+* **`AutoScaler`**, Automatically adds or removes instances based on build volume 
+  WIP Move `AutoScaler` into `Agent` operator
 
-To learn more about the CRDs introduced by the Prometheus Operator have a look
+To learn more about the CRDs introduced by the Pipeline Operator have a look
 at the [design doc](docs/design.md).
 
 ## Installation
@@ -52,7 +55,7 @@ operator will automatically shut down and remove Prometheus and Alertmanager pod
 
 ```
 for n in $(kubectl get namespaces -o jsonpath={..metadata.name}); do
-  kubectl delete --all --namespace=$n pipeline,buildagent
+  kubectl delete --all --namespace=$n pipeline,agent
 done
 ```
 
@@ -67,10 +70,10 @@ and defines three custom resource definitions. You can clean these up now.
 
 ```
 for n in $(kubectl get namespaces -o jsonpath={..metadata.name}); do
-  kubectl delete --ignore-not-found --namespace=$n service pipeline-operated buildagent-operated
+  kubectl delete --ignore-not-found --namespace=$n service pipeline-operater agent-operater
 done
 
-kubectl delete --ignore-not-found customresourcedefinitions pipeline.duke.lol buildagent.duke.lol
+kubectl delete --ignore-not-found customresourcedefinitions pipeline.duke.lol agent.duke.lol
 ```
 
 ## Development
@@ -88,3 +91,5 @@ Pass the following flags to `minikube start` to enable neccesary configuration c
 #!/bin/bash
 minikube delete; minikube start --kubernetes-version=v1.9.1 --memory=4096 --bootstrapper=kubeadm --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=Webhook --extra-config=scheduler.address=0.0.0.0 --extra-config=controller-manager.address=0.0.0.0
 ```
+
+When making changes to the API, ensure that you update the versioned clients via `make generate`.
