@@ -16,7 +16,7 @@ import (
 
 	agentv1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
 	"github.com/marjoram/pipeline-operator/log"
-	"github.com/marjoram/pipeline-operator/operator/pipeline"
+	operator "github.com/marjoram/pipeline-operator/operator/agent"
 )
 
 // Main is the main program.
