@@ -1,0 +1,23 @@
+apiVersion: duked/v1alpha1
+kind: Agent
+metadata:
+  name: pipeline-agent
+  labels:
+    operator: pipeline-operator
+spec:
+  selector:
+    pipeline: project-pipeline
+  sourceRepository: github.com:marjoram/pipeline.git
+  secrets:
+    name: test-secrets
+  worker:
+    replicas:
+      minReplicas: 1
+      maxReplicas: 4
+    resources:
+      requests:
+        cpu: 10m
+        memory: 50Mi
+      limits:
+        cpu: 100m
+        memory: 50Mi

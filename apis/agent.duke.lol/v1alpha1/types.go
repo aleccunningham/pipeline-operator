@@ -23,12 +23,14 @@ type Agent struct {
 
 // PipelineSpec is the spec for a Agent resource
 type AgentSpec struct {
-	// Selector is how the target will be selected
+	// selector is how the target will be selected
 	selector map[string]string `json:"selector,omitempty"`
 	// sourceRepository is the location of a Deployments code
 	sourceRepository string `json:"sourceRepository,omitempty"`
-	secrets          Secrets
-	worker           Worker
+	// image is the Dockerfile used by the agent
+	image   string  `json:"image,omitempty"`
+	secrets Secrets `json:"secrets,omitempty"`
+	worker  Worker  `json:"worker,omitempty"`
 }
 
 // Secrets defines the location, kind, and type of a kubernetes secret object
@@ -36,14 +38,6 @@ type Secrets struct {
 	// name is the label for a single secret
 	name string `json:"name,omitempty"`
 	// TODO
-}
-
-// RunWhen defines what events trigger the operator to execute the pipeline
-type RunWhen struct {
-	// event holds all possible event-based conditionals i.e. "on_commit"
-	event map[string]string `json:"event,omitempty"`
-	// branch defines a git branch conditional
-	branch string `json:"branch,omitempty"`
 }
 
 // Worker defines the configuration for a pipeline executor

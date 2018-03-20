@@ -2,6 +2,7 @@ package scheme
 
 import (
 	agentv1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.duke.lol/v1alpha1"
+	autoscalerv1alpha1 "github.com/marjoram/pipeline-operator/apis/autoscaler.duke.lol/v1alpha1"
 	pipelinev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -34,6 +35,7 @@ func init() {
 // correctly.
 func AddToScheme(scheme *runtime.Scheme) {
 	agentv1alpha1.AddToScheme(scheme)
+	autoscalerv1alpha1.AddToScheme(scheme)
 	pipelinev1alpha1.AddToScheme(scheme)
 
 }
