@@ -1,9 +1,9 @@
 package fake
 
 import (
-	clientset "github.com/marjoram/duke-crd/client/k8s/clientset/versioned"
-	dukev1alpha1 "github.com/marjoram/duke-crd/client/k8s/clientset/versioned/typed/duke/v1alpha1"
-	fakedukev1alpha1 "github.com/marjoram/duke-crd/client/k8s/clientset/versioned/typed/duke/v1alpha1/fake"
+	clientset "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned"
+	pipelinev1alpha1 "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/typed/pipeline.duke.lol/v1alpha1"
+	fakepipelinev1alpha1 "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/typed/pipeline.duke.lol/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -44,12 +44,12 @@ func (c *Clientset) Discovery() discovery.DiscoveryInterface {
 
 var _ clientset.Interface = &Clientset{}
 
-// DukeV1alpha1 retrieves the DukeV1alpha1Client
-func (c *Clientset) DukeV1alpha1() dukev1alpha1.DukeV1alpha1Interface {
-	return &fakedukev1alpha1.FakeDukeV1alpha1{Fake: &c.Fake}
+// PipelineV1alpha1 retrieves the PipelineV1alpha1Client
+func (c *Clientset) PipelineV1alpha1() pipelinev1alpha1.PipelineV1alpha1Interface {
+	return &fakepipelinev1alpha1.FakePipelineV1alpha1{Fake: &c.Fake}
 }
 
-// Duke retrieves the DukeV1alpha1Client
-func (c *Clientset) Duke() dukev1alpha1.DukeV1alpha1Interface {
-	return &fakedukev1alpha1.FakeDukeV1alpha1{Fake: &c.Fake}
+// Pipeline retrieves the PipelineV1alpha1Client
+func (c *Clientset) Pipeline() pipelinev1alpha1.PipelineV1alpha1Interface {
+	return &fakepipelinev1alpha1.FakePipelineV1alpha1{Fake: &c.Fake}
 }

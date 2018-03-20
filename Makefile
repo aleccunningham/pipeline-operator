@@ -1,7 +1,7 @@
 
 CODE_GENERATOR_IMAGE := slok/kube-code-generator:v1.9.1
 DIRECTORY := $(PWD)
-CODE_GENERATOR_PACKAGE := github.com/marjoram/duke-crd
+CODE_GENERATOR_PACKAGE := github.com/marjoram/pipeline-operator
 
 generate:
 	docker run --rm -it \
@@ -9,6 +9,6 @@ generate:
 	-e PROJECT_PACKAGE=$(CODE_GENERATOR_PACKAGE) \
 	-e CLIENT_GENERATOR_OUT=$(CODE_GENERATOR_PACKAGE)/client/k8s \
 	-e APIS_ROOT=$(CODE_GENERATOR_PACKAGE)/apis \
-	-e GROUPS_VERSION="duke:v1alpha1" \
+	-e GROUPS_VERSION="pipeline.duke.lol:v1alpha1" \
 	-e GENERATION_TARGETS="deepcopy,client" \
 	$(CODE_GENERATOR_IMAGE)

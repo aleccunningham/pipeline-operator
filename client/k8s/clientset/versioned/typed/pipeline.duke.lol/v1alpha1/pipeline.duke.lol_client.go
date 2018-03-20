@@ -1,8 +1,8 @@
 package v1alpha1
 
 import (
-	v1alpha1 "github.com/marjoram/duke-crd/apis/duke/v1alpha1"
-	"github.com/marjoram/duke-crd/client/k8s/clientset/versioned/scheme"
+	v1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	"github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/scheme"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
 )
