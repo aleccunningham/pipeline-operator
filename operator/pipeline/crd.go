@@ -8,50 +8,50 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 
-	dukev1alpha1 "github.com/marjoram/duke-crd/apis/duke/v1alpha1"
+	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
 )
 
-// dukePipeline is a Pipeline CRD
-type dukePipeline struct {
+// PipelineCRD is a Pipeline CRD
+type PipelineCRD struct {
 	crdCli   crd.Interface
 	kubecCli kubernetes.Interface
-	dukeCli  pipeline.Interface
+	pipeCli  pipeline.Interface
 }
 
-func newDukedPipelineCRD(dukeCli Pipeline.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface) *podTerminatorCRD {
-	return &dukePipelineCRD{
+func newPipelineCRD(pipeCli Pipeline.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface) *PipelineCRD {
+	return &PipelineCRD{
 		crdCli:   crdCli,
-		dukeCli:  dukeCli,
+		pipeCli:  pipeCli,
 		kubecCli: kubeCli,
 	}
 }
 
 // podTerminatorCRD satisfies resource.crd interface.
-func (p *dukedPipeline) Initialize() error {
+func (p *PipelineCRD) Initialize() error {
 	crd := crd.Conf{
-		Kind:       dukev1alpha1.PipelineKind,
-		NamePlural: dukev1alpha1.PipelineName,
-		Group:      dukev1alpha1.SchemeGroupVersion.Group,
-		Version:    dukev1alpha1.SchemeGroupVersion.Version,
-		Scope:      dukev1alpha1.PipelineScope,
+		Kind:       pipelinedukev1alpha1.PipelineKind,
+		NamePlural: pipelinedukev1alpha1.PipelineName,
+		Group:      pipelinedukev1alpha1.SchemeGroupVersion.Group,
+		Version:    pipelinedukev1alpha1.SchemeGroupVersion.Version,
+		Scope:      pipelinedukev1alpha1.PipelineScope,
 	}
 
 	return p.crdCli.EnsurePresent(crd)
 }
 
 // GetListerWatcher satisfies resource.crd interface (and retrieve.Retriever).
-func (p *dukePipeline) GetListerWatcher() cache.ListerWatcher {
+func (p *PipelineCRD) GetListerWatcher() cache.ListerWatcher {
 	return &cache.ListWatch{
 		ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
-			return p.dukeCli.DV1alpha1().PodTerminators().List(options)
+			return p.pipeCli.ListPipelines("", options)
 		},
 		WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
-			return p.dukeCli.ChaosV1alpha1().PodTerminators().Watch(options)
+			return p.pipeCli.WatchPipelines("", options)
 		},
 	}
 }
 
 // GetObject satisfies resource.crd interface (and retrieve.Retriever).
 func (p *podTerminatorCRD) GetObject() runtime.Object {
-	return &dukev1alpha1.Pipeline{}
+	return &pipelinedukev1alpha1.Pipeline{}
 }

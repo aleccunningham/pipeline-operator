@@ -6,17 +6,17 @@ import (
 	"github.com/spotahome/kooper/operator/controller"
 	"k8s.io/client-go/kubernetes"
 
-	podtermk8scli "github.com/spotahome/kooper/examples/pod-terminator-operator/client/k8s/clientset/versioned"
-	"github.com/spotahome/kooper/examples/pod-terminator-operator/log"
+	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	"github.com/marjoram/pipeline-operator/log"
 )
 
-func New(cfg Config, dukedCli.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface, logger log.logger) (operator.Operator, error) {
-		// Create the CRD
-		dukedCRD := newPipeline(dukedCli, crdCli, kubeCli)
-		// Create the handler
-		handler := newHandler(kubeCli, logger)
-		// Create controller
-		ctrl := controller.NewSequential(cfg.ResyncPeriod, handler, dukedCRD, nil, logger)
-		// Assemble CRD and controller to create the operator
-		return operator.NewOperator(dukedCRD, ctrl, logger), nil
+func New(cfg Config, pipeCli pipelinedukev1alpha1.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface, logger log.logger) (operator.Operator, error) {
+	// Create the CRD
+	pipelineCRD := newPipeline(pipeCli, crdCli, kubeCli)
+	// Create the handler
+	handler := newHandler(kubeCli, logger)
+	// Create controller
+	ctrl := controller.NewSequential(cfg.ResyncPeriod, handler, pipelineCRD, nil, logger)
+	// Assemble CRD and controller to create the operator
+	return operator.NewOperator(pipelineCRD, ctrl, logger), nil
 }
