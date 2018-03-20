@@ -1,7 +1,7 @@
 package fake
 
 import (
-	v1alpha1 "github.com/marjoram/duke-crd/apis/duke/v1alpha1"
+	v1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -15,9 +15,9 @@ type FakePipelines struct {
 	Fake *FakePipelineV1alpha1
 }
 
-var pipelinesResource = schema.GroupVersionResource{Group: "pipeline.duke.lol", Version: "v1alpha1", Resource: "pipelines"}
+var pipelinesResource = schema.GroupVersionResource{Group: "pipeline.cncd.io", Version: "v1alpha1", Resource: "pipelines"}
 
-var pipelinesKind = schema.GroupVersionKind{Group: "pipeline.duke.lol", Version: "v1alpha1", Kind: "Pipeline"}
+var pipelinesKind = schema.GroupVersionKind{Group: "pipeline.cncd.io", Version: "v1alpha1", Kind: "Pipeline"}
 
 // Get takes name of the pipeline, and returns the corresponding pipeline object, and an error if there is any.
 func (c *FakePipelines) Get(name string, options v1.GetOptions) (result *v1alpha1.Pipeline, err error) {

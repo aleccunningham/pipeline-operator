@@ -1,4 +1,4 @@
-apiVersion: duked/v1alpha1
+apiVersion: agent.cncd.io/v1alpha1
 kind: Agent
 metadata:
   name: pipeline-agent
@@ -8,6 +8,7 @@ spec:
   selector:
     pipeline: project-pipeline
   sourceRepository: github.com:marjoram/pipeline.git
+  image: quay.io/cncd/agent:v1alpha1
   secrets:
     name: test-secrets
   worker:

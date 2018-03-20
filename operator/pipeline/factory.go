@@ -6,11 +6,11 @@ import (
 	"github.com/spotahome/kooper/operator/controller"
 	"k8s.io/client-go/kubernetes"
 
-	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	pipelinev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
 	"github.com/marjoram/pipeline-operator/log"
 )
 
-func New(cfg Config, pipeCli pipelinedukev1alpha1.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface, logger log.logger) (operator.Operator, error) {
+func New(cfg Config, pipeCli pipelinev1alpha1.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface, logger log.logger) (operator.Operator, error) {
 	// Create the CRD
 	pipelineCRD := newPipeline(pipeCli, crdCli, kubeCli)
 	// Create the handler

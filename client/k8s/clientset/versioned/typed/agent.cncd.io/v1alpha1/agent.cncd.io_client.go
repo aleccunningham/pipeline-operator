@@ -1,28 +1,28 @@
 package v1alpha1
 
 import (
-	v1alpha1 "github.com/marjoram/duke-crd/apis/duke/v1alpha1"
-	"github.com/marjoram/duke-crd/client/k8s/clientset/versioned/scheme"
+	v1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.cncd.io/v1alpha1"
+	"github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/scheme"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
 )
 
-type PipelineV1alpha1Interface interface {
+type AgentV1alpha1Interface interface {
 	RESTClient() rest.Interface
-	PipelinesGetter
+	AgentsGetter
 }
 
-// PipelineV1alpha1Client is used to interact with features provided by the pipeline.duke.lol group.
-type PipelineV1alpha1Client struct {
+// AgentV1alpha1Client is used to interact with features provided by the agent.cncd.io group.
+type AgentV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *PipelineV1alpha1Client) Pipelines() PipelineInterface {
-	return newPipelines(c)
+func (c *AgentV1alpha1Client) Agents() AgentInterface {
+	return newAgents(c)
 }
 
-// NewForConfig creates a new PipelineV1alpha1Client for the given config.
-func NewForConfig(c *rest.Config) (*PipelineV1alpha1Client, error) {
+// NewForConfig creates a new AgentV1alpha1Client for the given config.
+func NewForConfig(c *rest.Config) (*AgentV1alpha1Client, error) {
 	config := *c
 	if err := setConfigDefaults(&config); err != nil {
 		return nil, err
@@ -31,12 +31,12 @@ func NewForConfig(c *rest.Config) (*PipelineV1alpha1Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &PipelineV1alpha1Client{client}, nil
+	return &AgentV1alpha1Client{client}, nil
 }
 
-// NewForConfigOrDie creates a new PipelineV1alpha1Client for the given config and
+// NewForConfigOrDie creates a new AgentV1alpha1Client for the given config and
 // panics if there is an error in the config.
-func NewForConfigOrDie(c *rest.Config) *PipelineV1alpha1Client {
+func NewForConfigOrDie(c *rest.Config) *AgentV1alpha1Client {
 	client, err := NewForConfig(c)
 	if err != nil {
 		panic(err)
@@ -44,9 +44,9 @@ func NewForConfigOrDie(c *rest.Config) *PipelineV1alpha1Client {
 	return client
 }
 
-// New creates a new PipelineV1alpha1Client for the given RESTClient.
-func New(c rest.Interface) *PipelineV1alpha1Client {
-	return &PipelineV1alpha1Client{c}
+// New creates a new AgentV1alpha1Client for the given RESTClient.
+func New(c rest.Interface) *AgentV1alpha1Client {
+	return &AgentV1alpha1Client{c}
 }
 
 func setConfigDefaults(config *rest.Config) error {
@@ -64,7 +64,7 @@ func setConfigDefaults(config *rest.Config) error {
 
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
-func (c *PipelineV1alpha1Client) RESTClient() rest.Interface {
+func (c *AgentV1alpha1Client) RESTClient() rest.Interface {
 	if c == nil {
 		return nil
 	}

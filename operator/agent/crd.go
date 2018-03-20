@@ -8,7 +8,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 
-	agentdukev1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.duke.lol/v1alpha1"
+	agentv1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.cncd.io/v1alpha1"
 )
 
 // AgentCRD is a Pipeline CRD
@@ -29,11 +29,11 @@ func newPipelineCRD(ageCli agentdukev1alpha1.Interface, crdCli crd.Interface, ku
 // podTerminatorCRD satisfies resource.crd interface.
 func (a *AgentCRD) Initialize() error {
 	crd := crd.Conf{
-		Kind:       pipelinedukev1alpha1.AgentKind,
-		NamePlural: pipelinedukev1alpha1.AgentName,
-		Group:      pipelinedukev1alpha1.SchemeGroupVersion.Group,
-		Version:    pipelinedukev1alpha1.SchemeGroupVersion.Version,
-		Scope:      pipelinedukev1alpha1.AgentScope,
+		Kind:       agentv1alpha1.AgentKind,
+		NamePlural: agentv1alpha1.AgentName,
+		Group:      agentv1alpha1.SchemeGroupVersion.Group,
+		Version:    agentv1alpha1.SchemeGroupVersion.Version,
+		Scope:      agentv1alpha1.AgentScope,
 	}
 
 	return a.crdCli.EnsurePresent(crd)
@@ -53,5 +53,5 @@ func (a *AgentCRD) GetListerWatcher() cache.ListerWatcher {
 
 // GetObject satisfies resource.crd interface (and retrieve.Retriever).
 func (a *AgentCRD) GetObject() runtime.Object {
-	return &pipelinedukev1alpha1.Agent{}
+	return &agentv1alpha1.Agent{}
 }
