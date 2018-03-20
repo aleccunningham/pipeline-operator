@@ -1,0 +1,49 @@
+apiVersion: duked/v1alpha1
+kind: Pipeline
+metadata:
+  name: project-pipeline
+  labels:
+    operator: pipeline-operator
+spec:
+  # Match deployment
+  selector:
+    app: sample-app
+    group: sample-group
+  # Git repository holding code used in docker image
+  sourceRepository: github.com:marjoram/pipeline.git
+  # Dockerfile to build/update
+  dockerfile: Dockerfile.pipeline
+  # SSH key for git authentication
+  ssh:
+    hostPath: /tmp/.ssh/id_rsa
+  # List of steps for the buildagent to run
+  steps:
+    - name: test
+      # Docker image used when executing commands
+      image: golang:1.9
+      # Each command is ran as a bash script
+      commands:
+        - go get ./...
+        - go test
+      # Step specific environment variables
+      env:
+        - GOPATH=/workspace/go
+      # Kubernetes secrets used in pipeline
+      secrets:
+  # Notify via conditionals
+  notify:
+    when:
+      event: ["on_success", "on_failure"]
+    where:
+      slack:
+        channel:
+          - general
+          - example
+        token:
+          - name: slack-token
+            secretFrom: /workspace/config
+      email:
+        from_address: technology@company.com
+        to_address:
+          - dev1@gmail.com
+          - dev2@gmail.com
