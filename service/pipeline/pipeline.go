@@ -5,13 +5,13 @@ import (
 
 	"k8s.io/client-go/kubernetes"
 
-	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	pipelinev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
 	"github.com/marjoram/pipeline-operator/log"
 )
 
-// Cliennt is the interface that every pipeline
+// PipelineClient is the interface that every pipeline
 // service implementation needs to implement.
-type Client interface {
+type PipelineClient interface {
 	// EnsurePipeline will ensure that the pipeline is running and working.
 	EnsurePipeline(pt *pipelinedukev1alpha1.Pipeline) error
 	// DeletePipeline will stop and delete the pipeline
@@ -36,17 +36,17 @@ func NewPipeline(k8sCli kubernetes.Interface, logger log.Logger) *Pipeline {
 }
 
 // EnsurePipeline satisfies Syncer interface.
-func (c *Client) EnsurePipeline(pt *pipelinedukev1alpha1.Pipeline) error {
-	pkt, ok := c.reg.Load(pt.Name)
-	var pk *PodKiller
+func (c *Client) EnsurePipeline(pipeline *pipelinev1alpha1.Pipeline) error {
+	pkt, ok := c.reg.Load(pipeline.Name)
+	var client *PipelineClient
 
 	// We are already running.
 	if ok {
-		pk = pkt.(*PodKiller)
+		pipeline = pkt.(*PipelineClient)
 		// If not the same spec means options have changed, so we don't longer need this pod killer.
-		if !pk.SameSpec(pt) {
-			c.logger.Infof("spec of %s changed, recreating pod killer", pt.Name)
-			if err := c.DeletePodTerminator(pt.Name); err != nil {
+		if !pipeline.SameSpec(pipeline) {
+			c.logger.Infof("spec of %s changed, recreating pod killer", pipeline.Name)
+			if err := c.DeletePipeline(pipeline.Name); err != nil {
 				return err
 			}
 		} else { // We are ok, nothing changed.
@@ -55,9 +55,9 @@ func (c *Client) EnsurePipeline(pt *pipelinedukev1alpha1.Pipeline) error {
 	}
 
 	// Create a pod killer.
-	ptCopy := pt.DeepCopy()
-	pk = NewPodKiller(ptCopy, c.k8sCli, c.logger)
-	c.reg.Store(pt.Name, pk)
-	return pk.Start()
+	// ptCopy := pt.DeepCopy()
+	// pk = NewPodKiller(ptCopy, c.k8sCli, c.logger)
+	// c.reg.Store(pt.Name, pk)
+	return pipeline.Start()
 	// TODO: garbage collection.
 }
