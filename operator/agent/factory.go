@@ -6,7 +6,7 @@ import (
 	"github.com/spotahome/kooper/operator/controller"
 	"k8s.io/client-go/kubernetes"
 
-	agentdukev1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.duke.lol/v1alpha1"
+	agentdukev1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.cncd.io/v1alpha1"
 	"github.com/marjoram/pipeline-operator/log"
 )
 

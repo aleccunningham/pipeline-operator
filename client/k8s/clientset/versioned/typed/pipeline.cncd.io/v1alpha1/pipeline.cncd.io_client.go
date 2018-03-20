@@ -1,7 +1,7 @@
 package v1alpha1
 
 import (
-	v1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	v1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
 	"github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned/scheme"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
@@ -12,7 +12,7 @@ type PipelineV1alpha1Interface interface {
 	PipelinesGetter
 }
 
-// PipelineV1alpha1Client is used to interact with features provided by the pipeline.duke.lol group.
+// PipelineV1alpha1Client is used to interact with features provided by the pipeline.cncd.io group.
 type PipelineV1alpha1Client struct {
 	restClient rest.Interface
 }

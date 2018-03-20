@@ -1,7 +1,7 @@
 package fake
 
 import (
-	v1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.duke.lol/v1alpha1"
+	v1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.cncd.io/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -15,9 +15,9 @@ type FakeAgents struct {
 	Fake *FakeAgentV1alpha1
 }
 
-var agentsResource = schema.GroupVersionResource{Group: "agent.duke.lol", Version: "v1alpha1", Resource: "agents"}
+var agentsResource = schema.GroupVersionResource{Group: "agent.cncd.io", Version: "v1alpha1", Resource: "agents"}
 
-var agentsKind = schema.GroupVersionKind{Group: "agent.duke.lol", Version: "v1alpha1", Kind: "Agent"}
+var agentsKind = schema.GroupVersionKind{Group: "agent.cncd.io", Version: "v1alpha1", Kind: "Agent"}
 
 // Get takes name of the agent, and returns the corresponding agent object, and an error if there is any.
 func (c *FakeAgents) Get(name string, options v1.GetOptions) (result *v1alpha1.Agent, err error) {

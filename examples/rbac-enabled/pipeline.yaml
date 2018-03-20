@@ -1,10 +1,19 @@
-apiVersion: duked/v1alpha1
+apiVersion: pipeline.cncd.io/v1alpha1
 kind: Pipeline
 metadata:
   name: project-pipeline
   labels:
     operator: pipeline-operator
 spec:
+  version: v2.2.0-rc.0
+  serviceAccountName: pipeline-operator
+  serviceMonitorSelector:
+    matchExpressions:
+    - {key: k8s-app, operator: Exists}
+  ruleSelector:
+    matchLabels:
+      role: prometheus-rulefiles
+      prometheus: k8s
   selector:
     app: sample-app
     group: sample-group
