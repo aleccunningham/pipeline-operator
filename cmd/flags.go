@@ -6,9 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
+	operator "github.com/marjoram/pipeline-operator/operator/pipeline"
 	"k8s.io/client-go/util/homedir"
-
-	"github.com/marjoram/duke-crd/operator"
 )
 
 // Flags are the controller flags.

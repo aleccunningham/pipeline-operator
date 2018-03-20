@@ -28,7 +28,7 @@ func newHandler(k8sCli kubernetes.Interface, logger log.Logger) *handler {
 func (h *handler) Add(obj runtime.Object) error {
 	pipeline, ok := obj.(*pipelinedukev1alpha1.Pipeline)
 	if !ok {
-		return fmt.Errorf("%v is not a duke object", obj.GetObjectKind())
+		return fmt.Errorf("%v is not a pipeline object", obj.GetObjectKind())
 	}
 
 	return h.pipelineService.EnsurePipeline(pipeline)

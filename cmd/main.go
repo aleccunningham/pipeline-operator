@@ -14,9 +14,9 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/marjoram/duke-crd/log"
-	"github.com/marjoram/duke-crd/operator"
-	pipelinek8scli "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned"
+	pipelinedukev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.duke.lol/v1alpha1"
+	"github.com/marjoram/pipeline-operator/log"
+	"github.com/marjoram/pipeline-operator/operator/pipeline"
 )
 
 // Main is the main program.
@@ -41,13 +41,13 @@ func (m *Main) Run(stopC <-chan struct{}) error {
 	m.logger.Infof("initializing pod termination operator")
 
 	// Get kubernetes rest client.
-	dukeCli, crdCli, k8sCli, err := m.getKubernetesClients()
+	pipeCli, crdCli, k8sCli, err := m.getKubernetesClients()
 	if err != nil {
 		return err
 	}
 
 	// Create the operator and run
-	op, err := operator.New(m.config, ptCli, crdCli, k8sCli, m.logger)
+	op, err := operator.New(m.config, pipeCli, crdCli, k8sCli, m.logger)
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func (m *Main) getKubernetesClients() (pipelinek8scli.Interface, crd.Interface, 
 	}
 
 	// App CRD k8s types client.
-	pipeCli, err := pipelinek8scli.NewForConfig(cfg)
+	pipeCli, err := pipelinedukev1alpha1.NewForConfig(cfg)
 	if err != nil {
 		return nil, nil, nil, err
 	}

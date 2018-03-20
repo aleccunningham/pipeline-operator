@@ -178,8 +178,8 @@ func (in *PipelineList) DeepCopyInto(out *PipelineList) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
 	out.ListMeta = in.ListMeta
-	if in.items != nil {
-		in, out := &in.items, &out.items
+	if in.Items != nil {
+		in, out := &in.Items, &out.Items
 		*out = make([]Pipeline, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])

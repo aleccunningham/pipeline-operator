@@ -1,4 +1,4 @@
-package chaos
+package pipeline
 
 import (
 	"sync"
@@ -9,9 +9,9 @@ import (
 	"github.com/marjoram/pipeline-operator/log"
 )
 
-// Syncer is the interface that every chaos service implementation
-// needs to implement.
-type Syncer interface {
+// Cliennt is the interface that every pipeline
+// service implementation needs to implement.
+type Client interface {
 	// EnsurePipeline will ensure that the pipeline is running and working.
 	EnsurePipeline(pt *pipelinedukev1alpha1.Pipeline) error
 	// DeletePipeline will stop and delete the pipeline
@@ -36,7 +36,7 @@ func NewPipeline(k8sCli kubernetes.Interface, logger log.Logger) *Pipeline {
 }
 
 // EnsurePipeline satisfies Syncer interface.
-func (c *Chaos) EnsurePipeline(pt *pipelinedukev1alpha1.Pipeline) error {
+func (c *Client) EnsurePipeline(pt *pipelinedukev1alpha1.Pipeline) error {
 	pkt, ok := c.reg.Load(pt.Name)
 	var pk *PodKiller
 

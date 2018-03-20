@@ -151,5 +151,6 @@ type ConditionType string
 type PipelineList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
-	items           []Pipeline `json:"items"`
+
+	Items []Pipeline `json:"items"`
 }
