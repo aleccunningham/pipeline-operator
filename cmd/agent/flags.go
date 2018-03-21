@@ -6,11 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
-<<<<<<< HEAD
 	operator "github.com/marjoram/pipeline-operator/operator/pipeline"
-=======
-	operator "github.com/marjoram/pipeline-operator/operator/agent"
->>>>>>> ffd6c1235c199f3159f0e92c31feb2080e37f4bc
 	"k8s.io/client-go/util/homedir"
 )
 

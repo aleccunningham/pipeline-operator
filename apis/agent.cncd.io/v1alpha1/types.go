@@ -4,6 +4,15 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// AgentList is a list of Agents.
+type AgentList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata"`
+	Items           []Agent `json:"items"`
+}
+
 // +genclient
 // +genclient:nonNamespaced
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -18,7 +27,7 @@ type Agent struct {
 	// Specification of the ddesired behaviour of the pod terminator.
 	// More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
 	// +optional
-	Spec PipelineSpec `json:"spec"`
+	Spec AgentSpec `json:"spec"`
 }
 
 // PipelineSpec is the spec for a Agent resource
@@ -36,7 +45,8 @@ type AgentSpec struct {
 // Secrets defines the location, kind, and type of a kubernetes secret object
 type Secrets struct {
 	// name is the label for a single secret
-	name string `json:"name,omitempty"`
+	name  string `json:"name,omitempty"`
+	alias string `json:"alias,omitempty"`
 	// TODO
 }
 
@@ -78,11 +88,3 @@ type Condition struct {
 
 // ConditionType defines the condition that the pipelinne can have
 type ConditionType string
-
-// Pipeline
-type AgentList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata"`
-
-	Items []Agent `json:"items"`
-}

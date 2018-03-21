@@ -1,4 +1,4 @@
-package operator
+package pipeline
 
 import (
 	"github.com/spotahome/kooper/client/crd"
@@ -6,13 +6,14 @@ import (
 	"github.com/spotahome/kooper/operator/controller"
 	"k8s.io/client-go/kubernetes"
 
-	pipelinev1alpha1 "github.com/marjoram/pipeline-operator/apis/pipeline.cncd.io/v1alpha1"
+	pipelinek8sCli "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned"
 	"github.com/marjoram/pipeline-operator/log"
+	o "github.com/marjoram/pipeline-operator/operator"
 )
 
-func New(cfg Config, pipeCli pipelinev1alpha1.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface, logger log.logger) (operator.Operator, error) {
+func New(cfg Config, pipeCli pipelinek8sCli.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface, logger log.Logger) (o.pipeline.Operator, error) {
 	// Create the CRD
-	pipelineCRD := newPipeline(pipeCli, crdCli, kubeCli)
+	pipelineCRD := newPipelineCRD(pipeCli, crdCli, kubeCli)
 	// Create the handler
 	handler := newHandler(kubeCli, logger)
 	// Create controller

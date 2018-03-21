@@ -1,4 +1,4 @@
-package operator
+package agent
 
 import (
 	"github.com/spotahome/kooper/client/crd"
@@ -9,24 +9,25 @@ import (
 	"k8s.io/client-go/tools/cache"
 
 	agentv1alpha1 "github.com/marjoram/pipeline-operator/apis/agent.cncd.io/v1alpha1"
+	agentk8sCli "github.com/marjoram/pipeline-operator/client/k8s/clientset/versioned"
 )
 
 // AgentCRD is a Pipeline CRD
 type AgentCRD struct {
 	crdCli   crd.Interface
 	kubecCli kubernetes.Interface
-	ageCli   agentdukev1alpha1.Interface
+	ageCli   agentk8sCli.Interface
 }
 
-func newPipelineCRD(ageCli agentdukev1alpha1.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface) *PipelineCRD {
-	return &PipelineCRD{
+func newAgentCRD(ageCli agentk8sCli.Interface, crdCli crd.Interface, kubeCli kubernetes.Interface) *AgentCRD {
+	return &AgentCRD{
 		crdCli:   crdCli,
 		ageCli:   ageCli,
 		kubecCli: kubeCli,
 	}
 }
 
-// podTerminatorCRD satisfies resource.crd interface.
+// agentCRD satisfies resource.crd interface.
 func (a *AgentCRD) Initialize() error {
 	crd := crd.Conf{
 		Kind:       agentv1alpha1.AgentKind,
@@ -42,11 +43,11 @@ func (a *AgentCRD) Initialize() error {
 // GetListerWatcher satisfies resource.crd interface (and retrieve.Retriever).
 func (a *AgentCRD) GetListerWatcher() cache.ListerWatcher {
 	return &cache.ListWatch{
-		ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
-			return a.ageCli.ListAgents("", options)
+		ListFunc: func(opts metav1.ListOptions) (runtime.Object, error) {
+			return a.ageCli.AgentV1alpha1().Agents().List(opts)
 		},
-		WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
-			return a.ageCli.WatchAgents("", options)
+		WatchFunc: func(opts metav1.ListOptions) (watch.Interface, error) {
+			return a.ageCli.AgentV1alpha1().Agents().Watch(opts)
 		},
 	}
 }
