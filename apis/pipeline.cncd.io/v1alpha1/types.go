@@ -24,16 +24,18 @@ type Pipeline struct {
 // PipelineSpec is the spec for a Duked resource
 type PipelineSpec struct {
 	// Selector is how the target will be selected
-	selector map[string]string `json:"selector,omitempty"`
+	Selector map[string]string `json:"selector,omitempty"`
 	// sourceRepository is the location of a Deployments code
 	sourceRepository string `json:"sourceRepository,omitempty"`
-	// dockerfile specifies which dockerfile to use from sourceRepository
-	dockerfile string `json:"dockerfile,omitempty"`
-	ssh        SSHSettings
-	steps      Steps
-	notify     Notify
-	when       RunWhen
-	config     Config
+	// Dockerfile specifies which dockerfile to use from sourceRepository
+	Dockerfile string      `json:"dockerfile,omitempty"`
+	Volume     Volume      `json:"volume,omitempty"`
+	Volumes    Volumes     `json:"volumes,omitempty"`
+	SSH        SSHSettings `json:"ssh,omitempty"`
+	Steps      Steps       `json:"steps,omitempty"`
+	Notify     Notify      `json:"notify,omitempty"`
+	When       RunWhen     `json:"when,omitempty"`
+	Config     Config      `json:"config,omitempty"`
 }
 
 // SSHSettings defines operations for using SSH keys with duke
@@ -47,7 +49,7 @@ type Steps struct {
 	// name is the label for a single pipeline step
 	name string `json:"name,omitempty"`
 	// image is the docker builder image to run steps in
-	image string `jsonn:"image,omitempty"`
+	image string `json:"image,omitempty"`
 	// commands is an array of strings defining a custom command to execute
 	commands map[string]string `json:"commands,omitempty"`
 	// env defines environment variables ingested by the build executor
@@ -64,48 +66,54 @@ type Secrets struct {
 
 // Notify
 type Notify struct {
-	when  NotifyWhen  `json:"when,omitempty"`
-	where NotifyWhere `json:"where,omitempty"`
+	When  []NotifyWhen  `json:"when,omitempty"`
+	Where []NotifyWhere `json:"where,omitempty"`
 }
 
 // NotifyWhen defines conditionals for notifications
 type NotifyWhen struct {
 	// event holds all possible event-based conditionals i.e. "on_success"
-	event map[string]string `json:"event,omitempty"`
+	Events []Event `json:"event,omitempty"`
 }
 
 // NotifyWhere defines the external services to POST to for notifications
 // New providers can be added via satisfying notify.Interface
 type NotifyWhere struct {
 	// slack integration
-	slack NotifyWhereSlack `json:"slack,omitempty"`
+	Slack NotifyWhereSlack `json:"slack,omitempty"`
 	// email integration
-	email NotifyWhereEmail `json:"email,omitempty"`
+	Email NotifyWhereEmail `json:"email,omitempty"`
 }
 
 // NotifyWhereSlack defines notifications via slack
 type NotifyWhereSlack struct {
 	// channel is a list of slack channels
-	channel map[string]string `json:"channel,omitempty"`
+	Channel map[string]string `json:"channel,omitempty"`
 	// TODO allow fromSecret
 	// token is the workspace-specific slack token for authentication
-	token string `json:"token,omitempty"`
+	Token string `json:"token,omitempty"`
 }
 
 // NotifyWhereEmail defines notifications via email
 type NotifyWhereEmail struct {
 	// from_address is the outgoing email address
-	from_address string `json:"from_address,omitempty"`
+	fromAddress string `json:"from_address,omitempty"`
 	// to_address is a list of addresses to notify
-	to_address map[string]string `json:"to_address,omitempty"`
+	toAddress map[string]string `json:"to_address,omitempty"`
+}
+
+// Event is an event used as a when/where conditional
+type Event struct {
+	Name  string `json:"name,omitempty"`
+	Alias string `json:"name,omitempty"`
 }
 
 // RunWhen defines what events trigger the operator to execute the pipeline
 type RunWhen struct {
 	// event holds all possible event-based conditionals i.e. "on_commit"
-	event map[string]string `json:"event,omitempty"`
+	Event []Event `json:"events,omitempty"`
 	// branch defines a git branch conditional
-	branch string `json:"branch,omitempty"`
+	Branch string `json:"branch,omitempty"`
 }
 
 // Status has the status of the cluster
@@ -126,14 +134,6 @@ type Condition struct {
 
 // ConditionType defines the condition that the pipelinne can have
 type ConditionType string
-
-// Pipeline
-type PipelineList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata"`
-
-	Items []Pipeline `json:"items"`
-}
 
 // Config defines the runtime configuration of a pipeline.
 type Config struct {
@@ -211,6 +211,11 @@ type Volume struct {
 	DriverOpts map[string]string `json:"driver_opts,omitempty"`
 }
 
+// Volumes define storage objects used in a pipeline
+type Volumes struct {
+	Volumes []*Volume
+}
+
 // Secret defines a runtime secret
 type Secret struct {
 	Name  string `json:"name,omitempty"`
@@ -227,4 +232,12 @@ type State struct {
 	Exited bool `json:"exited"`
 	// Container is oom killed, true or false
 	OOMKilled bool `json:"oom_killed"`
+}
+
+// PipelineList
+type PipelineList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata"`
+
+	Items []Pipeline `json:"items"`
 }

@@ -24,7 +24,7 @@ func newHandler(k8sCli kubernetes.Interface, logger log.Logger) *handler {
 	}
 }
 
-// Add will ensure that the required pipeline workers are runninng
+// Add will ensure that the required pipeline workers are running
 func (h *handler) Add(obj runtime.Object) error {
 	agent, ok := obj.(*agentv1alpha1.Agennt)
 	if !ok {

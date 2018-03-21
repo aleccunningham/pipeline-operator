@@ -1,0 +1,127 @@
+apiVersion: pipeline.cncd.io/v1alpha1
+kind: Pipeline
+metadata:
+spec:
+  selector:
+    - one_selector
+    - two_selector
+  sourceRepository: github.com:marjoram/pipeline-operator.git
+  dockerfile: Dockerfile.pipeline
+  volume:
+    name: workspace
+    driver: hostPath
+    driver_opts: /workspace
+  volumes:
+    - vol1:
+    - vol2:
+  ssh:
+    hostPath: /workspace/.ssh
+  steps:
+    name:
+    image:
+    comands: [""]
+    env: [""]
+    secrets:
+      name:
+  notify:
+    when:
+      event: [""]
+    where:
+      slack:
+        channel: [""]
+        token: <string>
+      email:
+        from_address:
+        to_address:
+  when:
+    event: [""]
+  config:
+    secrets:
+      - name: string
+        value: string
+        mount: string
+        mask: true
+    volumes:
+      - name: string
+        driver: string
+        driver_opts: strinng
+      networks:
+      - name: string
+        driver: string
+        driver_opts: string
+      - name: string
+        driver: string
+        driver_opts: string
+    pipeline:
+      - stage:
+          name:
+          alias:
+          steps:
+            name:
+            alias:
+            image:
+            pull: true
+            detached: true
+            privileged: true
+            working_dir:
+            environment: [""]
+            labels: [""]
+            entrypoint:
+              - string1
+              - string2
+            extra_hosts:
+              - string1
+              - string2
+            volumes:
+              - string1
+              - string2
+            tmpfs:
+              - string1
+              - string2
+            devices:
+              - string1
+              - string2
+            networks:
+              - Conn1
+              - Conn2
+            dns:
+              - string1
+              - string2
+            dns_search:
+              - string1
+              - string2
+            memswap_limit: 10
+            mem_limit: 10
+            shm_size: 10
+            cpu_quota: 10
+            cpu_shares: 3
+            cpu_set: string
+            on_failure: true
+            on_success: true
+            auth_config:
+              username: string
+              password: string
+              email: string
+            network_mode: string
+            ipc_mode: string
+            sysctls: [""]
+---
+apiVersion: agent.cncd.io/v1alpha1
+kind: Agent
+metadata:
+spec:
+  selector: [""]
+  sourceRepository: string
+  image: string
+  secrets:
+    - name: string
+      alias: string
+  worker:
+    replicas: 2
+    resources:
+      requests:
+        cpu: 10m
+        memory: 50Mi
+      limits:
+        cpu: 10m
+        memory: 50Mi

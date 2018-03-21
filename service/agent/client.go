@@ -1,6 +1,7 @@
 package agent
 
 import (
+	"context"
 	"log"
 	"sync"
 
@@ -8,11 +9,15 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-type AgentRunner interface {
+type AgentClient interface {
 	// EnsureAgennt will ensure that the pod terminator is running and working.
 	EnsureAgent(agent *agentv1alpha1.Agent) error
 	// DeleteAgent will stop and delete the pod terminator.
 	DeleteAgent(name string) error
+	// Run takes a build request and executes it
+	Run(ctx context.Context) error
+	// Next returns the next build request in the queue
+	Next(ctx context.Context) error
 }
 
 // Agent is the service that will ensure that the desired pod terminator CRDs are met.
@@ -33,9 +38,9 @@ func NewAgent(k8sCli kubernetes.Interface, logger log.Logger) *Chaos {
 }
 
 // EnsureAgent satisfies AgentRunner interface.
-func (a *AgentRunner) EnsureAgent(agent *agentv1alpha1.Agent) error {
+func (a *AgentClient) EnsureAgent(agent *agentv1alpha1.Agent) error {
 	pkt, ok := a.reg.Load(agent.Name)
-	var runner *AgentRunner
+	var runner *AgentClient
 
 	// We are already running.
 	if ok {
@@ -60,7 +65,7 @@ func (a *AgentRunner) EnsureAgent(agent *agentv1alpha1.Agent) error {
 }
 
 // DeletePodTerminator satisfies ChaosSyncer interface.
-func (a *AgentRunner) DeleteAgent(name string) error {
+func (a *AgentClient) DeleteAgent(name string) error {
 	pkt, ok := a.reg.Load(name)
 	if !ok {
 		return nil
